@@ -23,18 +23,6 @@ frontend:
     fe: { ansible_host: 85.215.135.141 }
   vars:
     vn:
-      bridge:
-        managed: true
-        template:
-          VN_MAD: bridge
-          AR:
-            TYPE: IP4
-            IP: 10.11.12.200
-            SIZE: 48
-          NETWORK_ADDRESS: 10.11.12.0
-          NETWORK_MASK: 255.255.255.0
-          GATEWAY: 10.11.12.1
-          DNS: 1.1.1.1
       vxlan:
         managed: true
         template:
@@ -43,14 +31,14 @@ frontend:
           BRIDGE: br1
           VLAN_ID: 86
           FILTER_IP_SPOOFING: 'NO'
-          FILTER_MAC_SPOOFING: 'YES'
+          FILTER_MAC_SPOOFING: 'NO'
           GUEST_MTU: 1450
           AR:
             TYPE: IP4
-            IP: 192.168.150.200
-            SIZE: 48
-          NETWORK_ADDRESS: 192.168.150.0
+            IP: 217.154.201.90
+            SIZE: 1
           NETWORK_MASK: 255.255.255.0
+          GATEWAY: 217.154.201.1
 
 node:
   hosts:
@@ -58,7 +46,6 @@ node:
   vars:
     vn:
       vxlan:
-        # Define a VNET of type vxlan and move IP4/6 settings from ens6 to br1.
         managed: true
         template:
           VN_MAD: vxlan
@@ -66,11 +53,11 @@ node:
           BRIDGE: br1
           VLAN_ID: 86
           FILTER_IP_SPOOFING: 'NO'
-          FILTER_MAC_SPOOFING: 'YES'
+          FILTER_MAC_SPOOFING: 'NO'
           GUEST_MTU: 1450
           AR:
             TYPE: IP4
-            IP: 192.168.150.200
-            SIZE: 48
-          NETWORK_ADDRESS: 192.168.150.0
+            IP: 217.154.201.90
+            SIZE: 1
           NETWORK_MASK: 255.255.255.0
+          GATEWAY: 217.154.201.1
