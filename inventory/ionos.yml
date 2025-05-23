@@ -16,48 +16,46 @@ all:
     one_pass: 'opennebula'
     one_token: 'ci:Pantufl4.'
     db_backend: SQLite
-
+    vn:
+      pubridge:
+        managed: true
+        template:
+          VN_MAD: bridge
+          PHYDEV: ens6
+          BRIDGE: br0          
+          AR:
+            TYPE: IP4
+            IP: 217.154.222.244
+            SIZE: 3
+          DNS: 1.1.1.1
+          NETWORK_MASK: 255.255.255.248
+          GATEWAY: 192.168.1.2
+          FILTER_IP_SPOOFING: 'NO'
+          FILTER_MAC_SPOOFING: 'NO'
+      vxlan:
+        managed: true
+        template:
+          VN_MAD: vxlan
+          PHYDEV: ens7
+          BRIDGE: br1
+          VLAN_ID: 86
+          FILTER_IP_SPOOFING: 'NO'
+          FILTER_MAC_SPOOFING: 'NO'
+          GUEST_MTU: 1450
+          AR:
+            TYPE: IP4
+            IP: 10.1.2.100
+            SIZE: 48
+          NETWORK_ADDRESS: 10.1.2.0
+          NETWORK_MASK: 255.255.255.0
+          GATEWAY: 10.1.2.1
 
 frontend:
   hosts:
-    fe: { ansible_host: 85.215.135.141 }
-  vars:
-    vn:
-      vxlan:
-        managed: true
-        template:
-          VN_MAD: vxlan
-          PHYDEV: ens6
-          BRIDGE: br1
-          VLAN_ID: 86
-          FILTER_IP_SPOOFING: 'NO'
-          FILTER_MAC_SPOOFING: 'NO'
-          GUEST_MTU: 1450
-          AR:
-            TYPE: IP4
-            IP: 217.154.201.90
-            SIZE: 1
-          NETWORK_MASK: 255.255.255.0
-          GATEWAY: 217.154.201.1
+    fe: { ansible_host: 85.215.249.150 }
+
 
 node:
   hosts:
-    host01: { ansible_host: 217.154.88.115 }
-  vars:
-    vn:
-      vxlan:
-        managed: true
-        template:
-          VN_MAD: vxlan
-          PHYDEV: ens6
-          BRIDGE: br1
-          VLAN_ID: 86
-          FILTER_IP_SPOOFING: 'NO'
-          FILTER_MAC_SPOOFING: 'NO'
-          GUEST_MTU: 1450
-          AR:
-            TYPE: IP4
-            IP: 217.154.201.90
-            SIZE: 1
-          NETWORK_MASK: 255.255.255.0
-          GATEWAY: 217.154.201.1
+    host01: { ansible_host: 85.215.135.68 }
+    host02: { ansible_host: 85.215.202.19 }

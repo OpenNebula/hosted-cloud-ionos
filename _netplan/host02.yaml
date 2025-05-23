@@ -1,0 +1,23 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens6:
+      dhcp4: no
+      optional: true
+    ens7:
+      dhcp4: true
+  bridges:
+    br0:
+      interfaces: [ens6]
+      addresses: [217.154.235.246/32, 192.168.1.2/32]
+      nameservers:
+        addresses: [8.8.8.8,8.8.4.4]
+      routes:
+        - to: 217.154.235.1/32
+          via: 0.0.0.0
+          scope: link
+        - to: 0.0.0.0/0
+          via: 217.154.235.1
+      parameters:
+        stp: false
