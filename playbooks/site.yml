@@ -1,8 +1,0 @@
----
-- ansible.builtin.import_playbook: opennebula.deploy.site
-
-- hosts:
-    - "{{ frontend_group | d('frontend') }}"
-    - "{{ node_group | d('node') }}"
-  roles:
-    - { role: opennebula.deploy.helper.facts, _force: true }

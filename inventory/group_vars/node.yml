@@ -1,0 +1,2 @@
+run_core_services_verification: false
+run_network_benchmark: true 

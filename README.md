@@ -1,6 +1,6 @@
 # OpenNebula on IONOS Cloud
 
-Deployment and configuration specific to IONOS Cloud. This repo is following the structure [engineering-deploy](https://github.com/OpenNebula/engineering-deploy).
+Deployment and configuration specific to IONOS Cloud. This repo is extends on the [one-deploy-validation](https://github.com/OpenNebula/one-deploy-validation).
 
 ## Requirements
 
@@ -13,46 +13,36 @@ Deployment and configuration specific to IONOS Cloud. This repo is following the
    pip install hatch
    ```
 
-   or
+1. Initialize the dependent `one-deploy-validation` submodule
 
    ```shell
-   pipx install hatch
+   git submodule update --init
    ```
 
-   or use any other method you see fit
-
-2. Install the `opennebula.deploy` collection with dependencies
+1. Install the `opennebula.deploy` collection with dependencies using the submodule's tooling:
 
    ```shell
-   make requirements
+   make submodule-requirements
    ```
 
-   if you'd like to pick specific branch (instead of `master`), tag or a custom fork
+## Inventory/Execution
+
+> [!NOTE]
+> It's exactly the same as with `one-deploy`.
+
+1. Inventories are kept in the `./inventory/` directory.
+
+1. Some specific make targets for deployment and verification are exposed from the submodule. To deploy with the default inventory file, using the submodule's tooling:
 
    ```shell
-   make requirements ONE_DEPLOY_URL:=git+https://github.com/OpenNebula/one-deploy.git,release-1.2.1
+   make main
    ```
 
-   the `one-deploy` repository checkout should be available in `~/.ansible/collections/ansible_collections/opennebula/deploy/`
+1. To verify the deployment using the configurations in the default inventory file:
 
+   ```shell
+   make verification
+   ```
 
-   ## Inventory/Execution
-   
-   > [!NOTE]
-   > It's exactly the same as with `one-deploy`.
-   
-   1. Inventories are kept in the `./inventory/` directory.
-   
-   2. To execute `ansible-playbook` you can run
-   
-      ```shell
-      make I=inventory/ionos.yml main
-      ```
-   
-      all the normal targets are available by default
-   
-      - [infra](./playbooks/infra.yml)
-      - [main](./playbooks/main.yml)
-      - [pre](./playbooks/pre.yml)
-      - [site](./playbooks/site.yml)
-   
+For more information about the submodule's tooling, refer to its [README.md](https://github.com/OpenNebula/one-deploy-validation/blob/master/README.md).
+

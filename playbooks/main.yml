@@ -1,4 +1,0 @@
----
-- ansible.builtin.import_playbook: ./pre.yml
-- ansible.builtin.import_playbook: ./site.yml
-
