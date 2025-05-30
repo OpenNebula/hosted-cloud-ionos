@@ -25,7 +25,7 @@ all:
           BRIDGE: br0          
           AR:
             TYPE: IP4
-            IP: 217.154.222.246
+            IP: 217.154.225.193
             SIZE: 1
           DNS: 1.1.1.1
           NETWORK_MASK: 255.255.255.255
@@ -52,10 +52,10 @@ all:
 
 frontend:
   hosts:
-    fe: { ansible_host: 217.154.222.244 }
+    fe: { ansible_host: 217.154.225.208 }
 
 
 node:
   hosts:
-    host01: { ansible_host: 217.154.222.244 }
-    host02: { ansible_host: 217.154.222.245 }
+    host01: { ansible_host: 217.154.225.208 }
+    host02: { ansible_host: 217.154.225.209 }
