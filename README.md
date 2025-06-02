@@ -25,6 +25,10 @@ Deployment and configuration specific to IONOS Cloud. This repo is extends on th
    make submodule-requirements
    ```
 
+## Infrastructure provisioning
+
+A detailed guide to provision the required reference infrastructure is published in [IONOS - OpenNebula Deployment Guide](https://docs.google.com/document/d/e/2PACX-1vR7fsXGSXHoKeeFGbM92KLCNDqa0PFOQEQL1iDwYsMct6lIAbAll46kJ4V33CdBcuic80ax-84mynqC/pub).
+
 ## Inventory/Execution
 
 > [!NOTE]
