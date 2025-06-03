@@ -52,10 +52,18 @@
       state: absent
 
   - name: Verify ionosctl installation
-    command: "{{ ionos_config.ionosctl.install_path | regex_replace('/$', '')}}/ionosctl version"
+    command: "{{ ionos_config.ionosctl.install_path | regex_replace('/$', '') }}/ionosctl version"
     register: ionosctl_version_check
     changed_when: false
-    
+
+  - name: Add ionosctl to oneadmin's PATH permanently
+    lineinfile:
+      path: "~/.bashrc"
+      line: "export PATH={{ ionos_config.ionosctl.install_path | regex_replace('/$', '') }}:$PATH"
+      regexp: "^export PATH=.*{{ ionos_config.ionosctl.install_path | regex_replace('/$', '') }}.*$"
+      state: present
+      create: yes
+
   become: true
   become_user: oneadmin
 
