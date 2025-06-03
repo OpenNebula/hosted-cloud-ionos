@@ -13,7 +13,7 @@ all:
       evpn: false
 
     one_version: '6.10'
-    one_pass: 'opennebula'
+    one_pass: 'newpass'
     one_token: 'ci:Pantufl4.'
     db_backend: SQLite
     vn:

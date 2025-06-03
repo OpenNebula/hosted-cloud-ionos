@@ -1,0 +1,58 @@
+---
+- name: Ensure destination directory exists
+  file:
+    path: "{{ drivers_base_path }}"
+    state: directory
+    mode: '0755'
+    owner: oneadmin
+    group: oneadmin
+
+- name: Create script from template and copy to host
+  template:
+    dest: "{{ drivers_base_path }}/vnm/bridge/clean.d/01-del-route-public-ip.sh"
+    src: templates/vnm/bridge/clean.d/01-del-route-public-ip.sh.j2
+    owner: oneadmin
+    group: oneadmin
+    mode: '0755'
+  vars:
+    server_id: "d84f8a6b-bee0-4b24-82d5-4c28ea97e84d"
+    nic_id: "07f0a82e-0f41-47d2-834d-729748399608" 
+
+- name: Create script from template and copy to host
+  template:
+    dest: "{{ drivers_base_path }}/vnm/bridge/pre.d/01-add-route-public-ip.sh"
+    src: templates/vnm/bridge/pre.d/01-add-route-public-ip.sh.j2
+    owner: oneadmin
+    group: oneadmin
+    mode: '0755'
+  vars:
+    server_id: "d84f8a6b-bee0-4b24-82d5-4c28ea97e84d"
+    nic_id: "07f0a82e-0f41-47d2-834d-729748399608" 
+
+- name: Get list of OpenNebula host IDs
+  shell: onehost list -l ID --csv --no-header
+  register: host_ids
+  become: true
+  become_user: oneadmin
+  changed_when: false
+
+- name: Display all host IDs
+  debug:
+    msg: "Found OpenNebula hosts with IDs: {{ host_ids.stdout_lines }}"
+
+- name: Synchronize each OpenNebula host
+  shell: onehost sync -f {{ item }}
+  register: sync_results
+  become: true
+  become_user: oneadmin
+  loop: "{{ host_ids.stdout_lines }}"
+  changed_when: "'All hosts updated successfully' in sync_results.stdout"
+
+- name: Display synchronization results
+  debug:
+    msg: |
+      Host ID: {{ item.item }}
+      Synchronization output:
+      {{ item.stdout }}
+  loop: "{{ sync_results.results }}"
+

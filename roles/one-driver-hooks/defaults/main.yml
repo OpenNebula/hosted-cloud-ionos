@@ -1,0 +1,7 @@
+---
+drivers_base_path: /var/lib/one/remotes/
+ionos_config:
+  data_center_uuid: "TBA-dc-id"
+  ionosctl:
+    install_path: "/tmp/ionosctl/"
+    token: "TBA-token"

@@ -1,0 +1,15 @@
+[project]
+name = "opennebula-hosted-ionos"
+version = "0.0.0"
+description = "OpenNebula deployment on IONOS Cloud"
+authors = ["OpenNebula <contact@opennebula.io>"]
+license = "Apache-2.0"
+readme = "README.md"
+requires-python = ">=3.9"
+
+[tool.hatch.envs.ionos-default]
+skip-install = true
+installer = "uv"
+dependencies = [
+  "ansible-core<2.17"
+]
