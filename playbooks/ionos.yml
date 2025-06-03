@@ -3,7 +3,7 @@
   roles:
     - role: one-driver-hooks
           
-# - hosts: "{{ node_group | d('node') }}"
-#   roles:
-#     - role: ionosctl
+- hosts: "{{ node_group | d('node') }}"
+  roles:
+    - role: ionosctl
 
