@@ -1,5 +1,4 @@
 ---
-# TODO: enough to execute it only on one host!
 - block:
     - name: Create a temporary directory
       ansible.builtin.tempfile:
@@ -7,13 +6,23 @@
         suffix: datacenter
       register: temp_dir
 
-    # TODO: a check to see if ionosctl is available
-
-    - name: Source bashrc, update PATH, and extract server IDs from datacenter JSON
+    - name: Login with ionosctl
       ansible.builtin.shell: |
+        source ~/.bashrc
+        ionosctl login --force --token '{{ ionos_config.ionosctl.token }}'
+      register: ionosctl_login
+      failed_when: ionosctl_login.rc != 0
+      args:
+        executable: /bin/bash
+      no_log: true
+
+    - name: Extract server IDs from datacenter JSON
+      ansible.builtin.shell: |
+        source ~/.bashrc
         ionosctl datacenter get --datacenter-id {{ ionos_config.data_center_uuid }} --depth 4 -o json > {{ temp_dir.path }}/datacenter.json
-      register: ionos_dc_command
-      changed_when: false
+        ionosctl logout
+      args:
+        executable: /bin/bash
 
     # Fetch the JSON file from remote host to Ansible controller (suppress base64 output)
     - name: Fetch datacenter JSON from remote host
