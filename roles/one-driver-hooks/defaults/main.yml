@@ -1,7 +1,10 @@
 ---
+get_dc_uuids: false
+render_driver_hooks: false
+distribute_uuids: false
 drivers_base_path: /var/lib/one/remotes/
 ionos_config:
-  data_center_uuid: "TBA-dc-id"
+  data_center_uuid: "7ff493e4-c722-4429-80f3-0c90564c26c3"
   ionosctl:
-    install_path: "/tmp/ionosctl/"
-    token: "TBA-token"
+    install_path: "${HOME}/ionosctl/"
+    token: "TBA"

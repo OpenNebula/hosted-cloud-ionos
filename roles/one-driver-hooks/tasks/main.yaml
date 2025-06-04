@@ -1,0 +1,16 @@
+---
+- name: Include get-uuids.yml tasks if enabled
+  ansible.builtin.include_tasks:
+    file: "{{ role_path }}/tasks/get-uuids.yaml"
+  when: get_dc_uuids | bool
+
+- name: Include render-driver-hooks.yaml tasks if enabled
+  ansible.builtin.include_tasks:
+    file: "{{ role_path }}/tasks/render-driver-hooks.yaml"
+  when: render_driver_hooks | bool
+  
+- name: Include distribute-uuids.yaml tasks if enabled
+  ansible.builtin.include_tasks:
+    file: "{{ role_path }}/tasks/distribute-uuids.yaml"
+  when: distribute_uuids | bool
+  

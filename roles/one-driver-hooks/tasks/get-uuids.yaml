@@ -1,0 +1,64 @@
+---
+# TODO: enough to execute it only on one host!
+- block:
+    - name: Create a temporary directory
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: datacenter
+      register: temp_dir
+
+    # TODO: a check to see if ionosctl is available
+
+    - name: Source bashrc, update PATH, and extract server IDs from datacenter JSON
+      ansible.builtin.shell: |
+        ionosctl datacenter get --datacenter-id {{ ionos_config.data_center_uuid }} --depth 4 -o json > {{ temp_dir.path }}/datacenter.json
+      register: ionos_dc_command
+      changed_when: false
+
+    # Fetch the JSON file from remote host to Ansible controller (suppress base64 output)
+    - name: Fetch datacenter JSON from remote host
+      slurp:
+        src: "{{ temp_dir.path }}/datacenter.json"
+      register: datacenter_json_b64encoded
+      no_log: true
+
+    # Parse the base64-encoded content
+    - name: Parse datacenter data and extract server information
+      set_fact:
+        server_mapping: "{{ server_mapping_dict | from_json }}"
+      vars:
+        server_mapping_dict: |
+          {% set result = {} %}
+          {% set datacenter_json = datacenter_json_b64encoded['content'] | b64decode | from_json %}
+          {% for server in datacenter_json.entities.servers['items'] %}
+            {% for nic in server.entities.nics['items'] %}
+              {% for ip in nic.properties.ips %}
+                {% set _ = result.update({ip: {'server_id': server.id, 'nic_id': nic.id}}) %}
+              {% endfor %}
+            {% endfor %}
+          {% endfor %}
+          {{ result | to_json }}
+
+  become: true
+  become_user: oneadmin
+  run_once: true
+
+- name: Display server mapping
+  debug:
+    msg: |
+      Server information by IP address:
+      {% for ip, details in server_mapping.items() %}
+      IP: {{ ip }}
+        Server ID: {{ details.server_id }}
+        NIC ID: {{ details.nic_id }}
+      {% endfor %}
+  run_once: true
+
+- name: Save server_mapping to a file on the controller
+  copy:
+    content: "{{ server_mapping | to_nice_json }}"
+    dest: "{{ lookup('env', 'TMPDIR') | default('/tmp', true) }}/server_mapping.json"
+  delegate_to: localhost
+  become: false
+  run_once: true
+

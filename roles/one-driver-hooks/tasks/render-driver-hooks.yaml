@@ -14,9 +14,6 @@
     owner: oneadmin
     group: oneadmin
     mode: '0755'
-  vars:
-    server_id: "d84f8a6b-bee0-4b24-82d5-4c28ea97e84d"
-    nic_id: "07f0a82e-0f41-47d2-834d-729748399608" 
 
 - name: Create script from template and copy to host
   template:
@@ -25,9 +22,6 @@
     owner: oneadmin
     group: oneadmin
     mode: '0755'
-  vars:
-    server_id: "d84f8a6b-bee0-4b24-82d5-4c28ea97e84d"
-    nic_id: "07f0a82e-0f41-47d2-834d-729748399608" 
 
 - name: Get list of OpenNebula host IDs
   shell: onehost list -l ID --csv --no-header

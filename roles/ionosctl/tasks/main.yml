@@ -28,6 +28,7 @@
       curl -sL {{ ionosctl_url }} | tar -xzv -C /tmp/ionosctl-{{ ionos_config.ionosctl.version }}
     args:
       creates: "/tmp/ionosctl-{{ ionos_config.ionosctl.version }}/ionosctl"
+    no_log: true
 
   - name: Ensure ionosctl install path exists
     file:

@@ -1,13 +1,11 @@
 #!/bin/bash
 
-export PATH={{ ionos_config.ionosctl.install_path }}:$PATH
-
 # --force is required to override the existing config file, if it exists
 ionosctl login --force --token '{{ ionos_config.ionosctl.token }}'
 
 ionosctl nic update --datacenter-id  {{ ionos_config.data_center_uuid }}\
- --server-id {{ server_id }}\
- --nic-id {{ nic_id }}\
+ --server-id ${IONOS_SERVER_ID}\
+ --nic-id ${IONOS_PUBLIC_BRDIGE_NIC_ID}\
  --ips '217.154.225.209,217.154.225.193'
 
 # Note: NOPASSWORD rule is needed for the oneadmin to add/delete routes

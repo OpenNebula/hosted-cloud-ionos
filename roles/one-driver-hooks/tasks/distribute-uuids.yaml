@@ -1,0 +1,35 @@
+---
+- name: Load server_mapping from file created by get-uuids.yaml task
+  set_fact:
+    server_mapping: "{{ lookup('file', (lookup('env', 'TMPDIR') | default('/tmp', true)) + '/server_mapping.json') | from_json }}"
+
+- name: Display server mapping
+  debug:
+    msg: |
+      Server information by IP address:
+      {% for ip, details in server_mapping.items() %}
+      IP: {{ ip }}
+        Server ID: {{ details.server_id }}
+        NIC ID: {{ details.nic_id }}
+      {% endfor %}
+
+- name: Set nic_id and server_id for each host
+  set_fact:
+    nic_id: "{{ server_mapping[ansible_host]['nic_id']}}"
+    server_id: "{{ server_mapping[ansible_host]['server_id']}}"
+  failed_when: server_mapping[ansible_host] is not defined or 
+               server_mapping[ansible_host]['nic_id'] is not defined or 
+               server_mapping[ansible_host]['server_id'] is not defined
+
+- name: Persist nic_id and server_id as environment variables for oneadmin
+  lineinfile:
+    path: "~/.bashrc"
+    line: 'export {{ item.key }}={{ item.value }}'
+    regexp: '^export {{ item.key }}='
+    state: present
+    create: yes
+  loop:
+    - { key: "IONOS_PUBLIC_BRDIGE_NIC_ID", value: "{{ nic_id }}" }
+    - { key: "IONOS_SERVER_ID", value: "{{ server_id }}" }
+  become: true
+  become_user: oneadmin
