@@ -4,7 +4,11 @@ render_driver_hooks: false
 distribute_uuids: false
 drivers_base_path: /var/lib/one/remotes/
 ionos_config:
+  # TODO: expose main env-dependent variables in the inventory
   data_center_uuid: "7ff493e4-c722-4429-80f3-0c90564c26c3"
+  public_bridge_name: "br0"
   ionosctl:
     install_path: "${HOME}/ionosctl/"
+    # TODO: how to handle this as secret?
     token: "TBA"
+  

@@ -1,14 +1,81 @@
 #!/bin/bash
 
-# --force is required to override the existing config file, if it exists
-ionosctl login --force --token '{{ ionos_config.ionosctl.token }}'
+set -x
 
-ionosctl nic update --datacenter-id  {{ ionos_config.data_center_uuid }}\
+# --force is required to override the existing config file, if it exists
+login_output=$(ionosctl login --force --token '{{ ionos_config.ionosctl.token }}' 2>&1)
+login_rc=$?
+if [[ $login_rc -ne 0 ]]; then
+  echo "ERROR: ionosctl login failed with code $login_rc"
+  echo "$login_output"
+  exit $login_rc
+fi
+
+# Extract all ETHx_IP fields and filter for public IPs
+xml_content=$(base64 -d)
+public_ip=""
+public_ip_count=0
+x=0
+while true; do
+  ip=$(echo "$xml_content" | grep -oP "(?<=<ETH${x}_IP><!\[CDATA\[)[^]]+")
+  if [[ -z "$ip" ]]; then
+    break
+  fi
+
+  # Check if $ip is public
+  if ! [[ "$ip" =~ ^10\. ]] && \
+     ! [[ "$ip" =~ ^192\.168\. ]] && \
+     ! [[ "$ip" =~ ^172\.(1[6-9]|2[0-9]|3[0-1])\. ]]; then
+        if [[ -z "$public_ip" ]]; then
+            public_ip="$ip"
+            public_ip_count=1
+        else
+            echo "WARNING: More than one public IP found (previous: $public_ip, another: $ip). Only the first will be used."
+            public_ip_count=$((public_ip_count+1))
+        fi
+    else
+        echo "Ignoring private IP: $ip"
+  fi
+  x=$((x+1))
+done
+
+if [[ -z "$public_ip" ]]; then
+  echo "No public IP found to add."
+  ionosctl logout
+  exit 0
+else
+  ethx_ip="$public_ip"
+fi
+
+current_nic_ips=$(ionosctl nic get --datacenter-id  {{ ionos_config.data_center_uuid }} --server-id ${IONOS_SERVER_ID} --nic-id ${IONOS_PUBLIC_BRDIGE_NIC_ID} --cols Ips --no-headers)
+
+echo "Updating NIC ${IONOS_PUBLIC_BRDIGE_NIC_ID} with new public IP $ethx_ip"
+update_output=$(ionosctl nic update --datacenter-id  {{ ionos_config.data_center_uuid }}\
  --server-id ${IONOS_SERVER_ID}\
  --nic-id ${IONOS_PUBLIC_BRDIGE_NIC_ID}\
- --ips '217.154.225.209,217.154.225.193'
+ --ips "$current_nic_ips,$ethx_ip" 2>&1)
+update_rc=$?
+if [[ $update_rc -ne 0 ]]; then
+  echo "ERROR: ionosctl nic update failed with code $update_rc"
+  echo "$update_output"
+fi
 
+echo "Adding route for public IP $ethx_ip on bridge interface {{ ionos_config.public_bridge_name }}"
 # Note: NOPASSWORD rule is needed for the oneadmin to add/delete routes
-sudo ip route add 217.154.225.193/32 dev br0
+route_output=$(sudo ip route add $ethx_ip/32 dev {{ ionos_config.public_bridge_name }} 2>&1)
+route_rc=$?
+if [[ $route_rc -ne 0 ]]; then
+  echo "ERROR: ip route addition failed with code $route_rc"
+  echo "$route_output"
+fi
 
 ionosctl logout
+
+# Return the first non-zero code, or 0 if both succeeded
+if [[ $update_rc -ne 0 ]]; then
+    exit $update_rc
+elif [[ $route_rc -ne 0 ]]; then
+    exit $route_rc
+else
+    exit 0
+fi
