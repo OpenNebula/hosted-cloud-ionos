@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x
-
 # --force is required to override the existing config file, if it exists
 login_output=$(ionosctl login --force --token '{{ ionosctl.token }}' 2>&1)
 login_rc=$?
@@ -48,16 +46,20 @@ else
 fi
 
 current_nic_ips=$(ionosctl nic get --datacenter-id  {{ ionos_config.data_center_uuid }} --server-id ${IONOS_SERVER_ID} --nic-id ${IONOS_PUBLIC_BRDIGE_NIC_ID} --cols Ips --no-headers)
-
-echo "Updating NIC ${IONOS_PUBLIC_BRDIGE_NIC_ID} with new public IP $ethx_ip"
-update_output=$(ionosctl nic update --datacenter-id  {{ ionos_config.data_center_uuid }}\
- --server-id ${IONOS_SERVER_ID}\
- --nic-id ${IONOS_PUBLIC_BRDIGE_NIC_ID}\
- --ips "$current_nic_ips,$ethx_ip" 2>&1)
-update_rc=$?
-if [[ $update_rc -ne 0 ]]; then
-  echo "ERROR: ionosctl nic update failed with code $update_rc"
-  echo "$update_output"
+if echo "$current_nic_ips" | grep -qw "$ethx_ip"; then
+  echo "WARNING: Public IP $ethx_ip is already assigned to NIC ${IONOS_PUBLIC_BRDIGE_NIC_ID}, skipping update."
+  update_rc=0
+else
+  echo "Updating NIC ${IONOS_PUBLIC_BRDIGE_NIC_ID} with new public IP $ethx_ip"
+  update_output=$(ionosctl nic update --datacenter-id  {{ ionos_config.data_center_uuid }}\
+   --server-id ${IONOS_SERVER_ID}\
+   --nic-id ${IONOS_PUBLIC_BRDIGE_NIC_ID}\
+   --ips "$current_nic_ips,$ethx_ip" 2>&1)
+  update_rc=$?
+  if [[ $update_rc -ne 0 ]]; then
+    echo "ERROR: ionosctl nic update failed with code $update_rc"
+    echo "$update_output"
+  fi
 fi
 
 echo "Adding route for public IP $ethx_ip on bridge interface {{ ionos_config.public_bridge_name }}"
