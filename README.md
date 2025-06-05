@@ -47,7 +47,29 @@ Update the `inventory` values and the `_netplan` files to match the provisioned 
 | IONOSCTL Install Path                       | `ionosctl.install_path`             | `inventory/ionos.yml`, `group_vars/all.yml`         | Optional          |
 | IONOSCTL Version                            | `ionosctl.version`                  | `inventory/ionos.yml`, `group_vars/all.yml`         | Optional          |
 
-After all these adjustments have been done in the configuration files, we are ready to start the OpenNebula deployment.
+## Configure IONOS server networking
+
+After provisioning the infrastructure in the IONOS Cloud, as detailed in the above deployment guide, their network configuration shall be adjusted to this repos automation. Access the CLI of the servers. Remove the generated default netplan configuration on the servers:
+
+```shell
+root@host-dedicated-core-server:~# rm /etc/netplan/50-cloud-init.yaml
+```
+
+Update the netplan configuration in the `_netplan` folder, by changing the IP addresses which are assigned to the servers. The gateway IPs for the route configurations are assigned by IONOS DHCP server. Copy the contents of the updated `_netplan` folder to the corresponding hosts, for example:
+
+```shell
+$ scp _netplan/host02.yaml root@217.154.225.209:/etc/netplan
+```
+
+Apply the netplan configurations on each host:
+
+```shell
+root@host-dedicated-core-server:~# netplan apply
+```
+
+If the servers lose connectivity, the netplan files contain errors. In any case, as a backup option, the servers are always accessible from the IONOS DCD by selecting the server and opening its console from the browser. Worst case, the connectivity can be recovered by restoring the original netplan file (`50-cloud-init.yaml`), or by recreating the HDD or the server. After fixing the issue apply the netplan changes again.
+
+After all these adjustments have been done in the configuration files and network settings, we are ready to start the OpenNebula deployment.
 
 ## Deployment and verification
 
