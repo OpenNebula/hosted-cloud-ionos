@@ -1,5 +1,5 @@
 ---
-ionos_config:
-  ionosctl:
-    install_path: "${HOME}/ionosctl/"
-    version: "6.8.4"
+ionosctl:
+  install_path: "${HOME}/ionosctl/"
+  version: "6.8.4"
+  token: "MANDATORY_PARAMETER_PLACEHOLDER"

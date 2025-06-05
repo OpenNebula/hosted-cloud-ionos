@@ -4,28 +4,12 @@ ansible_python_interpreter: /usr/bin/python3
 # Do we want check connection to the test VM? network might be blocked from FE
 test_vm_check_connection: true
 
-#
 execute_storage_benchmarking: true
 
-# Should we create a test network or reuse existing net? Existin network defined in {{test_vnet_name}} var
 create_test_network: false
-
 # Vars for the test network
 test_vnet_name: 'pubridge'
-test_bridge_name: 'br0'
-test_phydev: ens6
-
-test_ip_net: '217.154.225.193'
-test_subnet_mask: '255.255.255.255'
-test_dns: '8.8.8.8'
-test_gw: '192.168.1.2'
 
 # Marketplace App name for test VM instantiation
 test_vm_name: 'Alpine Linux 3.20'
-test_vm_template_extra: |
-  SCHED_REQUIREMENTS="NAME = \"217.154.225.209\""
 
-# PArameters for iperf network benchmarking
-iperf:
-  port: 5201
-  test_time: 10

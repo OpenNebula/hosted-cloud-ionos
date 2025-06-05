@@ -9,12 +9,23 @@
     - name: Login with ionosctl
       ansible.builtin.shell: |
         source ~/.bashrc
-        ionosctl login --force --token '{{ ionos_config.ionosctl.token }}'
+        ionosctl login --force --token '{{ ionosctl.token }}'
       register: ionosctl_login
-      failed_when: ionosctl_login.rc != 0
       args:
         executable: /bin/bash
+      ignore_errors: true
       no_log: true
+
+    - name: Fail with message if ionosctl login failed
+      ansible.builtin.fail:
+        msg: |
+          ionosctl login failed with code {{ ionosctl_login.rc }}.
+          Output:
+          {{ ionosctl_login.stdout | default('') }}
+          Error:
+          {{ ionosctl_login.stderr | default('') }}
+          Try to log in manually using: ionosctl login --force --token 'YOUR_TOKEN'
+      when: ionosctl_login.rc != 0
 
     - name: Extract server IDs from datacenter JSON
       ansible.builtin.shell: |

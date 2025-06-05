@@ -22,7 +22,7 @@ all:
         template:
           VN_MAD: bridge
           PHYDEV: ens6
-          BRIDGE: br0          
+          BRIDGE: br0
           AR:
             TYPE: IP4
             IP: 217.154.225.193
@@ -48,12 +48,18 @@ all:
             SIZE: 48
           NETWORK_ADDRESS: 10.1.2.0
           NETWORK_MASK: 255.255.255.0
-          GATEWAY: 10.1.2.1
+    ionos_config:
+      data_center_uuid: "7ff493e4-c722-4429-80f3-0c90564c26c3"
+      public_bridge_name: "br0"
+    ionosctl:
+      install_path: "${HOME}/ionosctl/"
+      version: "6.8.4"
+      # The token file shall be placed in 'playbooks/files/' directory
+      token: "{{ lookup('file', '.ionosctl_token') }}"
 
 frontend:
   hosts:
     fe: { ansible_host: 217.154.225.208 }
-
 
 node:
   hosts:

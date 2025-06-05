@@ -15,24 +15,24 @@
 
   - name: Set download URL
     set_fact:
-      ionosctl_url: "https://github.com/ionos-cloud/ionosctl/releases/download/v{{ ionos_config.ionosctl.version }}/ionosctl-{{ ionos_config.ionosctl.version }}-{{ os_type }}-{{ arch_type }}.tar.gz"
+      ionosctl_url: "https://github.com/ionos-cloud/ionosctl/releases/download/v{{ ionosctl.version }}/ionosctl-{{ ionosctl.version }}-{{ os_type }}-{{ arch_type }}.tar.gz"
 
   - name: Create temporary directory for download
     file:
-      path: "/tmp/ionosctl-{{ ionos_config.ionosctl.version }}"
+      path: "/tmp/ionosctl-{{ ionosctl.version }}"
       state: directory
       mode: '0755'
 
   - name: Download and extract ionosctl
     shell: >
-      curl -sL {{ ionosctl_url }} | tar -xzv -C /tmp/ionosctl-{{ ionos_config.ionosctl.version }}
+      curl -sL {{ ionosctl_url }} | tar -xzv -C /tmp/ionosctl-{{ ionosctl.version }}
     args:
-      creates: "/tmp/ionosctl-{{ ionos_config.ionosctl.version }}/ionosctl"
+      creates: "/tmp/ionosctl-{{ ionosctl.version }}/ionosctl"
     no_log: true
 
   - name: Ensure ionosctl install path exists
     file:
-      path: "{{ ionos_config.ionosctl.install_path | regex_replace('/$', '')}}"
+      path: "{{ ionosctl.install_path | regex_replace('/$', '')}}"
       state: directory
       mode: '0755'
       owner: oneadmin
@@ -40,8 +40,8 @@
 
   - name: Move ionosctl binary to system path
     copy:
-      src: "/tmp/ionosctl-{{ ionos_config.ionosctl.version }}/ionosctl"
-      dest: "{{ ionos_config.ionosctl.install_path | regex_replace('/$', '') }}/ionosctl"
+      src: "/tmp/ionosctl-{{ ionosctl.version }}/ionosctl"
+      dest: "{{ ionosctl.install_path | regex_replace('/$', '') }}/ionosctl"
       mode: '0755'
       remote_src: yes
       owner: oneadmin
@@ -49,21 +49,49 @@
 
   - name: Clean up temporary directory
     file:
-      path: "/tmp/ionosctl-{{ ionos_config.ionosctl.version }}"
+      path: "/tmp/ionosctl-{{ ionosctl.version }}"
       state: absent
 
   - name: Verify ionosctl installation
-    command: "{{ ionos_config.ionosctl.install_path | regex_replace('/$', '') }}/ionosctl version"
+    command: "{{ ionosctl.install_path | regex_replace('/$', '') }}/ionosctl version"
     register: ionosctl_version_check
     changed_when: false
 
   - name: Add ionosctl to oneadmin's PATH permanently
     lineinfile:
       path: "~/.bashrc"
-      line: "export PATH={{ ionos_config.ionosctl.install_path | regex_replace('/$', '') }}:$PATH"
-      regexp: "^export PATH=.*{{ ionos_config.ionosctl.install_path | regex_replace('/$', '') }}.*$"
+      line: "export PATH={{ ionosctl.install_path | regex_replace('/$', '') }}:$PATH"
+      regexp: "^export PATH=.*{{ ionosctl.install_path | regex_replace('/$', '') }}.*$"
       state: present
       create: yes
+
+  - name: Testing login with ionosctl
+    ansible.builtin.shell: |
+      source ~/.bashrc
+      ionosctl login --force --token '{{ ionosctl.token }}'
+    register: ionosctl_login
+    args:
+      executable: /bin/bash
+    ignore_errors: true
+    no_log: true
+
+  - name: Fail with message if ionosctl login failed
+    ansible.builtin.fail:
+      msg: |
+        ionosctl login failed with code {{ ionosctl_login.rc }}.
+        Output:
+        {{ ionosctl_login.stdout | default('') }}
+        Error:
+        {{ ionosctl_login.stderr | default('') }}
+        Try to log in manually using: ionosctl login --force --token 'YOUR_TOKEN'
+    when: ionosctl_login.rc != 0
+
+  - name: Logout from ionosctl
+    ansible.builtin.shell: |
+      source ~/.bashrc
+      ionosctl logout
+    args:
+      executable: /bin/bash
 
   become: true
   become_user: oneadmin

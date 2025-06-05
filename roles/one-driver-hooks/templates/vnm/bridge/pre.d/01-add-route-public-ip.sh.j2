@@ -3,7 +3,7 @@
 set -x
 
 # --force is required to override the existing config file, if it exists
-login_output=$(ionosctl login --force --token '{{ ionos_config.ionosctl.token }}' 2>&1)
+login_output=$(ionosctl login --force --token '{{ ionosctl.token }}' 2>&1)
 login_rc=$?
 if [[ $login_rc -ne 0 ]]; then
   echo "ERROR: ionosctl login failed with code $login_rc"

@@ -1,4 +1,12 @@
 ---
+- name: Fail if mandatory parameters are not set
+  ansible.builtin.fail:
+    msg: "Mandatory parameter '{{ item.name }}' must be set and not left as 'MANDATORY_PARAMETER_PLACEHOLDER'."
+  when: item.value is not defined or item.value == 'MANDATORY_PARAMETER_PLACEHOLDER'
+  loop:
+    - { name: "ionos_config.data_center_uuid", value: "{{ ionos_config.data_center_uuid | default(omit) }}" }
+    - { name: "ionosctl.token", value: "{{ ionosctl.token | default(omit) }}" }
+
 - name: Include get-uuids.yml tasks if enabled
   ansible.builtin.include_tasks:
     file: "{{ role_path }}/tasks/get-uuids.yaml"
