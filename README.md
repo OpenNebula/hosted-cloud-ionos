@@ -42,6 +42,7 @@ Update the `inventory` values and the `_netplan` files to match the provisioned 
 | VXLAN PHYDEV                                 | `vn.vxlan.template.PHYDEV`          | `inventory/ionos.yml`                               | 
 | pubridge PHYDEV                              | `vn.pubridge.template.PHYDEV`       | `inventory/ionos.yml`                               | 
 | VMs Public IP Range                        | `vn.pubridge.template.AR.IP`, `vn.pubridge.template.AR.SIZE` | `inventory/ionos.yml`           | 
+| GUI password of `oneadmin`       | `one_pass` | `inventory/ionos.yml`           | 
 | IONOS Data Center UUID                      | `ionos_config.data_center_uuid`     | `inventory/ionos.yml`, `group_vars/all.yml`         | 
 | IONOSCTL Token                             | `ionosctl.token`                    | `playbooks/files/.ionosctl_token` | 
 
