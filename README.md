@@ -41,7 +41,7 @@ Follow the provisioning steps and extract the requiremed parameters needed to pr
 
 ## Required Parameters
 
-Update the [inventory](./inventory) values and the [_netplan](./_netplan) files to match the provisioned infrastructure, as described in the above referenced deployment guide. The table below shows the required parameters that must be updated.
+Update the [inventory](./inventory) values and the [_netplan](./_netplan) files to match the provisioned infrastructure.
 
 | Description                    | Variable Names                                              | Files/Location                                                                             |
 |-------------------------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
@@ -56,7 +56,7 @@ Update the [inventory](./inventory) values and the [_netplan](./_netplan) files 
 | IONOSCTL Token                | `ionosctl.token`                                            | [`playbooks/files/.ionosctl_token`](./playbooks/files/.ionosctl_token)                      |
 
 
-The below parameters should work fine across different IONOS deployment. Consider these as a few key examples for further potential customization.
+**Optional customization parameters**:
 
 | Description                      | Variable Names                                                                   | Files/Location                                                                 |
 |----------------------------------|----------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
@@ -66,48 +66,47 @@ The below parameters should work fine across different IONOS deployment. Conside
 
 ## Configure IONOS Server Networking
 
-After provisioning the infrastructure in the IONOS Cloud, as detailed in the [IONOS - OpenNebula Deployment Guide](https://docs.google.com/document/d/e/2PACX-1vR7fsXGSXHoKeeFGbM92KLCNDqa0PFOQEQL1iDwYsMct6lIAbAll46kJ4V33CdBcuic80ax-84mynqC/pub), their network configuration needs to be adjusted. For this you'll need to SSH into the servers and remove the generated default netplan configuration on the servers:
+After provisioning, adjust the default network configuration in each of the hosts:
 
-```shell
-root@217.154.225.209:~# rm /etc/netplan/50-cloud-init.yaml
-```
+1. SSH into the host and remove the default netplan config:
 
-Afterwards, update the netplan configuration in the `_netplan` folder, by changing the IP addresses which are assigned to the servers. The gateway IPs for the route configurations are assigned by IONOS DHCP server. Copy the contents of the updated `_netplan` folder to the corresponding hosts, for example:
+   ```shell
+   root@217.154.225.209:~# rm /etc/netplan/50-cloud-init.yaml
+   ```
 
-```shell
-$ scp _netplan/host02.yaml root@217.154.225.209:/etc/netplan
-```
+1. Copy the updated configuration to the host:
 
-Apply the netplan configurations on each host:
+   ```shell
+   $ scp _netplan/host02.yaml root@217.154.225.209:/etc/netplan
+   ```
 
-```shell
-root@217.154.225.209:~# netplan apply
-```
+1. Apply the netplan configuration:
 
-Note that if the servers lose connectivity is likely because the netplan files contain errors. In any case, as a backup option, the servers are always accessible from the IONOS DCD by selecting the server and opening its console from the browser. Worst case, the connectivity can be recovered by restoring the original netplan file (`50-cloud-init.yaml`), or by recreating the HDD or the server. After fixing the issue apply the netplan changes again.
+   ```shell
+   root@217.154.225.209:~# netplan apply
+   ```
 
-After all these adjustments have been done in the configuration files and network settings, we are ready to start the OpenNebula deployment.
+If connectivity is lost, revert via IONOS DCD console access by restoring the original netplan file (`50-cloud-init.yaml`) or recreating the host.
 
 ## Deployment and Verification
 
-The deployment and verification procedure is highly automated using Ansible and Makefiles. The scripts make use of the configuration files in this repo, overwriting default values in the dependent automation scripts.
-Some specific `make` targets for deployment and verification are exposed from the submodule, while also an IONOS-specific installation step is automated.
+Use the provided Makefile commands to automate deployment and testing:
 
-1. As a first step. let's deploy OpenNebula with the inventory file updated above:
+1. Deploy OpenNebula:
 
    ```shell
    make main
    ```
    The launched Ansible scripts should finish without any error, and report on the number of changes performed for each hosts. If any error is reported, after the necessary troubleshooting and fixes, the deployment script can be re-executed without further cleanup steps.
 
-1. Next, let's configure the IONOS-specific tools:
+1. Configure IONOS-specific components:
 
    ```shell
    make ionos
    ```
    Similarly, this should finish without any errors. After this step the cloud environment is fully functional.
 
-1. Finally, we'll verify the deployment using the configurations in the default inventory file:
+1. Verify the deployment:
 
    ```shell
    make verification
