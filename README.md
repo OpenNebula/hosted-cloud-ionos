@@ -1,6 +1,6 @@
 # OpenNebula Cloud Hosted on IONOS Cloud
 
-This repository contains the needed code and documentation to achieve an OpenNebula deployment and configuration as a Cloud Hosted on IONOS cloud bare netal resources. This repo is extends on the [one-deploy-validation](https://github.com/OpenNebula/one-deploy-validation).c
+This repository contains the needed code and documentation to achieve an OpenNebula deployment and configuration as a Cloud Hosted on IONOS cloud bare netal resources. This repo extends the [one-deploy-validation](https://github.com/OpenNebula/one-deploy-validation) repository, which is added as a git submodule.
 
 ## Requirements
 
@@ -28,11 +28,11 @@ This repository contains the needed code and documentation to achieve an OpenNeb
 ## Infrastructure Provisioning
 
 A detailed guide to provision the required reference infrastructure is published in [IONOS - OpenNebula Deployment Guide](https://docs.google.com/document/d/e/2PACX-1vR7fsXGSXHoKeeFGbM92KLCNDqa0PFOQEQL1iDwYsMct6lIAbAll46kJ4V33CdBcuic80ax-84mynqC/pub).
-Follow the provisioning steps and the detailed guide on how to extract the essential parameters needed to proceed with the OpenNebula deployment.
+Follow the provisioning steps and the detailed guide on how to extract the requiremed parameters needed to proceed with the OpenNebula deployment.
 
-## Essential Parameters
+## Required Parameters
 
-Update the `inventory` values and the `_netplan` files to match the provisioned infrastructure, as described in the above referenced deployment guide. The table below shows the essential parameters that must be updated.
+Update the `inventory` values and the `_netplan` files to match the provisioned infrastructure, as described in the above referenced deployment guide. The table below shows the required parameters that must be updated.
 
 | Description                                 | Variable Names                      | Files/Location                                      |
 |---------------------------------------------|-------------------------------------|-----------------------------------------------------|
