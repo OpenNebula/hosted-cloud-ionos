@@ -1,6 +1,6 @@
 # OpenNebula Cloud Hosted on IONOS Cloud
 
-This repository contains the needed code and documentation to achieve an OpenNebula deployment and configuration as a Cloud Hosted on IONOS cloud bare netal resources. This repo extends the [one-deploy-validation](https://github.com/OpenNebula/one-deploy-validation) repository, which is added as a git submodule.
+This repository contains the needed code and documentation to perform an OpenNebula deployment and configuration as a Cloud Hosted on IONOS cloud bare netal resources. It extends the [one-deploy-validation](https://github.com/OpenNebula/one-deploy-validation) repository, which is added as a git submodule.
 
 ## Table of Contents
 
@@ -12,9 +12,6 @@ This repository contains the needed code and documentation to achieve an OpenNeb
 - [Deployment and Verification](#deployment-and-verification)
 
 ## Requirements
-
-> [!NOTE]
-> If Makefile is used then it will create python virtual environments using `hatch` (on demand).
 
 1. Install `hatch`
 
@@ -41,27 +38,28 @@ Follow the provisioning steps and the detailed guide on how to extract the requi
 
 ## Required Parameters
 
-Update the `inventory` values and the `_netplan` files to match the provisioned infrastructure, as described in the above referenced deployment guide. The table below shows the required parameters that must be updated.
+Update the [inventory](./inventory) values and the [_netplan](./_netplan) files to match the provisioned infrastructure, as described in the above referenced deployment guide. The table below shows the required parameters that must be updated.
 
-| Description                                 | Variable Names                      | Files/Location                                      |
-|---------------------------------------------|-------------------------------------|-----------------------------------------------------|
-| Frontend Host IP                            | `ansible_host`                      | `inventory/ionos.yml` (under `frontend: hosts:`)    | 
-| KVM Host IPs                            | `ansible_host`                      | `inventory/ionos.yml` (under `node: hosts:`), `/_netplan/*.yaml`    | 
-| KVM Host Gateway                            | `network.bridges.br0.routes.to` and `.via`                      | `/_netplan/*.yaml`    | 
-| VXLAN PHYDEV                                 | `vn.vxlan.template.PHYDEV`          | `inventory/ionos.yml`                               | 
-| pubridge PHYDEV                              | `vn.pubridge.template.PHYDEV`       | `inventory/ionos.yml`                               | 
-| VMs Public IP Range                        | `vn.pubridge.template.AR.IP`, `vn.pubridge.template.AR.SIZE` | `inventory/ionos.yml`           | 
-| GUI password of `oneadmin`       | `one_pass` | `inventory/ionos.yml`           | 
-| IONOS Data Center UUID                      | `ionos_config.data_center_uuid`     | `inventory/ionos.yml`, `group_vars/all.yml`         | 
-| IONOSCTL Token                             | `ionosctl.token`                    | `playbooks/files/.ionosctl_token` | 
+| Description                    | Variable Names                                              | Files/Location                                                                             |
+|-------------------------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
+| Frontend Host IP              | `ansible_host`                                              | [`inventory/ionos.yml`](./inventory/ionos.yml)                                              |
+| KVM Host IPs                  | `ansible_host`                                              | [`inventory/ionos.yml`](./inventory/ionos.yml) , [`_netplan/*.yaml`](./_netplan)            |
+| KVM Host Gateway              | `network.bridges.br0.routes.to` and `.via`                  | [`_netplan/*.yaml`](./_netplan)                                                             |
+| VXLAN PHYDEV                  | `vn.vxlan.template.PHYDEV`                                  | [`inventory/ionos.yml`](./inventory/ionos.yml)                                              |
+| pubridge PHYDEV               | `vn.pubridge.template.PHYDEV`                               | [`inventory/ionos.yml`](./inventory/ionos.yml)                                              |
+| VMs Public IP Range           | `vn.pubridge.template.AR.IP`, `vn.pubridge.template.AR.SIZE`| [`inventory/ionos.yml`](./inventory/ionos.yml)                                              |
+| GUI password of `oneadmin`    | `one_pass`                                                  | [`inventory/ionos.yml`](./inventory/ionos.yml)                                              |
+| IONOS Data Center UUID        | `ionos_config.data_center_uuid`                             | [`inventory/ionos.yml`](./inventory/ionos.yml), [`group_vars/all.yml`](./group_vars/all.yml)|
+| IONOSCTL Token                | `ionosctl.token`                                            | [`playbooks/files/.ionosctl_token`](./playbooks/files/.ionosctl_token)                      |
+
 
 The below parameters should work fine across different IONOS deployment. Consider these as a few key examples for further potential customization.
 
-| Description                                 | Variable Names                      | Files/Location                                      |
-|---------------------------------------------|-------------------------------------|-----------------------------------------------------|
-| IONOS Public Bridge Name                    | `ionos_config.public_bridge_name`, `vn.pubridge.template.BRIDGE`, `network.bridges.br0`   | `inventory/ionos.yml`, `group_vars/all.yml`         |
-| IONOSCTL Install Path                       | `ionosctl.install_path`             | `inventory/ionos.yml`, `group_vars/all.yml`         |
-| IONOSCTL Version                            | `ionosctl.version`                  | `inventory/ionos.yml`, `group_vars/all.yml`         |
+| Description                      | Variable Names                                                                   | Files/Location                                                                 |
+|----------------------------------|----------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| IONOS Public Bridge Name         | `ionos_config.public_bridge_name`, `vn.pubridge.template.BRIDGE`, `network.bridges.br0` | [`inventory/ionos.yml`](./inventory/ionos.yml), [`group_vars/all.yml`](./group_vars/all.yml) |
+| IONOSCTL Install Path            | `ionosctl.install_path`                                                         | [`inventory/ionos.yml`](./inventory/ionos.yml), [`group_vars/all.yml`](./group_vars/all.yml) |
+| IONOSCTL Version                 | `ionosctl.version`                                                              | [`inventory/ionos.yml`](./inventory/ionos.yml), [`group_vars/all.yml`](./group_vars/all.yml) |
 
 ## Configure IONOS Server Networking
 
