@@ -1,6 +1,6 @@
-# OpenNebula on IONOS Cloud
+# Cloud Hosted on IONOS Cloud
 
-Deployment and configuration specific to IONOS Cloud. This repo is extends on the [one-deploy-validation](https://github.com/OpenNebula/one-deploy-validation).
+This repository contains the needed code and documentation to achieve an OpenNebula deployment and configuration as a Cloud Hosted on IONOS cloud bare netal resources. This repo is extends on the [one-deploy-validation](https://github.com/OpenNebula/one-deploy-validation).c
 
 ## Requirements
 
@@ -25,12 +25,12 @@ Deployment and configuration specific to IONOS Cloud. This repo is extends on th
    make submodule-requirements
    ```
 
-## Infrastructure provisioning
+## Infrastructure Provisioning
 
 A detailed guide to provision the required reference infrastructure is published in [IONOS - OpenNebula Deployment Guide](https://docs.google.com/document/d/e/2PACX-1vR7fsXGSXHoKeeFGbM92KLCNDqa0PFOQEQL1iDwYsMct6lIAbAll46kJ4V33CdBcuic80ax-84mynqC/pub).
 Follow the provisioning steps and the detailed guide on how to extract the essential parameters needed to proceed with the OpenNebula deployment.
 
-## Customize the essential parameters
+## Essential Parameters
 
 Update the `inventory` values and the `_netplan` files to match the provisioned infrastructure, as described in the above referenced deployment guide. The table below shows the essential parameters that must be updated.
 
@@ -54,7 +54,7 @@ The below parameters should work fine across different IONOS deployment. Conside
 | IONOSCTL Install Path                       | `ionosctl.install_path`             | `inventory/ionos.yml`, `group_vars/all.yml`         |
 | IONOSCTL Version                            | `ionosctl.version`                  | `inventory/ionos.yml`, `group_vars/all.yml`         |
 
-## Configure IONOS server networking
+## Configure IONOS Server Networking
 
 After provisioning the infrastructure in the IONOS Cloud, as detailed in the above deployment guide, their network configuration shall be adjusted to this repos automation. Access the CLI of the servers. Remove the generated default netplan configuration on the servers:
 
@@ -78,7 +78,7 @@ If the servers lose connectivity, the netplan files contain errors. In any case,
 
 After all these adjustments have been done in the configuration files and network settings, we are ready to start the OpenNebula deployment.
 
-## Deployment and verification
+## Deployment and Verification
 
 The deployment and verification procedure is highly automated using Ansible and Makefiles. The scripts make use of the configuration files in this repo, overwriting default values in the dependent automation scripts.
 Some specific `make` targets for deployment and verification are exposed from the submodule, while also an IONOS-specific installation step is automated.
