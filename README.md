@@ -2,6 +2,15 @@
 
 This repository contains the needed code and documentation to achieve an OpenNebula deployment and configuration as a Cloud Hosted on IONOS cloud bare netal resources. This repo extends the [one-deploy-validation](https://github.com/OpenNebula/one-deploy-validation) repository, which is added as a git submodule.
 
+## Table of Contents
+
+- [OpenNebula Cloud Hosted on IONOS Cloud](#opennebula-cloud-hosted-on-ionos-cloud)
+- [Requirements](#requirements)
+- [Infrastructure Provisioning](#infrastructure-provisioning)
+- [Required Parameters](#required-parameters)
+- [Configure IONOS Server Networking](#configure-ionos-server-networking)
+- [Deployment and Verification](#deployment-and-verification)
+
 ## Requirements
 
 > [!NOTE]
