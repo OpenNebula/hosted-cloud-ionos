@@ -1,3 +1,6 @@
+
+![one-ionos](https://github.com/user-attachments/assets/523b4b3b-bc48-40b6-b857-99ee023253d5)
+
 # OpenNebula Cloud Hosted on IONOS Cloud
 
 This repository contains the needed code and documentation to perform an OpenNebula deployment and configuration as a Cloud Hosted on IONOS cloud bare netal resources. It extends the [one-deploy-validation](https://github.com/OpenNebula/one-deploy-validation) repository, which is added as a git submodule.
@@ -90,7 +93,7 @@ After all these adjustments have been done in the configuration files and networ
 The deployment and verification procedure is highly automated using Ansible and Makefiles. The scripts make use of the configuration files in this repo, overwriting default values in the dependent automation scripts.
 Some specific `make` targets for deployment and verification are exposed from the submodule, while also an IONOS-specific installation step is automated.
 
-1. As a first step. let¡s deploy OpenNebula with the inventory file updated above:
+1. As a first step. let's deploy OpenNebula with the inventory file updated above:
 
    ```shell
    make main
