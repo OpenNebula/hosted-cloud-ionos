@@ -1,9 +1,9 @@
 
 ![one-ionos](https://github.com/user-attachments/assets/523b4b3b-bc48-40b6-b857-99ee023253d5)
 
-# OpenNebula Cloud Hosted on IONOS Cloud
+# Deploying OpenNebula as a Hosted Cloud on IONOS
 
-This repository contains the needed code and documentation to perform an OpenNebula deployment and configuration as a Cloud Hosted on IONOS cloud bare netal resources. It extends the [one-deploy-validation](https://github.com/OpenNebula/one-deploy-validation) repository, which is added as a git submodule.
+This repository contains the needed code and documentation to perform an OpenNebula deployment and configuration as a Hosted Cloud on IONOS bare-metal resources. It extends the [one-deploy-validation](https://github.com/OpenNebula/one-deploy-validation) repository, which is added as a git submodule.
 
 ## Table of Contents
 
