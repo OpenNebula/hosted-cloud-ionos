@@ -80,6 +80,12 @@ After provisioning, adjust the default network configuration in each of the host
    $ scp _netplan/host02.yaml root@217.154.225.209:/etc/netplan
    ```
 
+1. Allow IP forwarding on all hosts (and add the `net.ipv4.ip_forward=1` line to `/etc/sysctl.conf` to make it persistent across reboots):
+
+   ```shell
+   root@217.154.225.209:~# sysctl -w net.ipv4.ip_forward=1
+   ```
+
 1. Apply the netplan configuration:
 
    ```shell
