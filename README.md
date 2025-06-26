@@ -36,7 +36,7 @@ This repository contains the needed code and documentation to perform an OpenNeb
 
 ## Infrastructure Provisioning
 
-A detailed guide to provision the required reference infrastructure is published in [IONOS - OpenNebula Deployment Guide](https://docs.google.com/document/d/e/2PACX-1vR7fsXGSXHoKeeFGbM92KLCNDqa0PFOQEQL1iDwYsMct6lIAbAll46kJ4V33CdBcuic80ax-84mynqC/pub).
+A detailed guide to provision the required reference infrastructure is published in [IONOS - OpenNebula Deployment Guide](https://docs.opennebula.io/7.0/solutions/hosted_cloud_providers/ionos_opennebula/).
 Follow the provisioning steps and extract the requiremed parameters needed to proceed with the OpenNebula deployment.
 
 ## Required Parameters
