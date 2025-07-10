@@ -8,14 +8,17 @@ $(ENV_IONOS_DEFAULT):
 	hatch env create ionos-default
 endif
 
-.PHONY: submodule-requirements infra pre site main verification ionos
+.PHONY: submodule-requirements deployment validation ionos
 
 submodule-requirements:
-	$(MAKE) -C submodule-one-deploy-validation requirements
+	$(MAKE) -C submodule-one-deploy requirements
 
 # Explicitly expose these targets to the parent Makefile.
-infra pre site main verification:
+validation:
 	$(MAKE) -C submodule-one-deploy-validation I=$(SELF)/inventory/ionos.yml $@
+
+deployment:
+	$(MAKE) -C submodule-one-deploy I=$(SELF)/inventory/ionos.yml main
 
 ionos: $(ENV_IONOS_DEFAULT)
 	cd $(SELF)/ && \

@@ -12,7 +12,7 @@ This repository contains the needed code and documentation to perform an OpenNeb
 - [Infrastructure Provisioning](#infrastructure-provisioning)
 - [Required Parameters](#required-parameters)
 - [Configure IONOS Server Networking](#configure-ionos-server-networking)
-- [Deployment and Verification](#deployment-and-verification)
+- [Deployment and Validation](#deployment-and-validation)
 
 ## Requirements
 
@@ -22,7 +22,7 @@ This repository contains the needed code and documentation to perform an OpenNeb
    pip install hatch
    ```
 
-1. Initialize the dependent `one-deploy-validation` submodule
+1. Initialize the dependent `one-deploy-validation` and `one-deploy` submodule
 
    ```shell
    git submodule update --init
@@ -94,14 +94,14 @@ After provisioning, adjust the default network configuration in each of the host
 
 If connectivity is lost, revert via IONOS DCD console access by restoring the original netplan file (`50-cloud-init.yaml`) or recreating the host.
 
-## Deployment and Verification
+## Deployment and Validation
 
 Use the provided Makefile commands to automate deployment and testing:
 
 1. Deploy OpenNebula:
 
    ```shell
-   make main
+   make deployment
    ```
    The launched Ansible scripts should finish without any error, and report on the number of changes performed for each hosts. If any error is reported, after the necessary troubleshooting and fixes, the deployment script can be re-executed without further cleanup steps.
 
@@ -112,12 +112,12 @@ Use the provided Makefile commands to automate deployment and testing:
    ```
    Similarly, this should finish without any errors. After this step the cloud environment is fully functional.
 
-1. Verify the deployment:
+1. Test the deployment:
 
    ```shell
-   make verification
+   make validation
    ```
-   If the test fails in any of the steps, after the necessary troubleshooting and fixes, the verification command can be safely re-executed. The final HTML report is only created when all tests have passed.
+   If the test fails in any of the steps, after the necessary troubleshooting and fixes, the validation command can be safely re-executed. The final HTML report is only created when all tests have passed.
    The output of the tests are compiled into a HTML report that can be found in path, printed by the automation script.
 
 For more information about the submodule's tooling, refer to the [one-deploy-validation's README.md](https://github.com/OpenNebula/one-deploy-validation/blob/master/README.md) and for detailed documentation on the deployment automation refer to the [one-deploy repo](https://github.com/OpenNebula/one-deploy).
