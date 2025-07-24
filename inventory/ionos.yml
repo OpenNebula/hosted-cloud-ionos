@@ -11,8 +11,7 @@ all:
     update_pkg_cache: true
     features:
       evpn: false
-
-    one_version: '6.99.85'
+    one_version: '7.0.0'
     one_pass: 'opennebula'
     db_backend: SQLite
     vn:
@@ -24,7 +23,7 @@ all:
           BRIDGE: br0
           AR:
             TYPE: IP4
-            IP: 217.154.225.193
+            IP: 217.154.213.216
             SIZE: 1
           DNS: 1.1.1.1
           NETWORK_MASK: 255.255.255.255
@@ -48,7 +47,7 @@ all:
           NETWORK_ADDRESS: 10.1.2.0
           NETWORK_MASK: 255.255.255.0
     ionos_config:
-      data_center_uuid: "7ff493e4-c722-4429-80f3-0c90564c26c3"
+      data_center_uuid: "393e31f9-a0d9-4faa-83fc-25f454ed772f"
       public_bridge_name: "br0"
     ionosctl:
       install_path: "${HOME}/ionosctl/"
@@ -58,9 +57,10 @@ all:
 
 frontend:
   hosts:
-    fe: { ansible_host: 217.154.225.208 }
+    fe: { ansible_host: 127.0.0.1 }
 
 node:
   hosts:
-    host01: { ansible_host: 217.154.225.208 }
-    host02: { ansible_host: 217.154.225.209 }
+    fe: { ansible_host: 10.7.222.12 }
+    h1: { ansible_host: 10.7.222.13 }
+    h2: { ansible_host: 10.7.222.11 }
