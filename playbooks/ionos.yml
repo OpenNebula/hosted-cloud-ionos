@@ -2,15 +2,14 @@
 - hosts: "{{ frontend_group | d('frontend') }}"
   roles:
     - role: ionosctl
-    - role: one-driver-hooks
+    - role: one-driver
       vars:
         get_dc_uuids: true
         render_driver_hooks: true
-          
+
 - hosts: "{{ node_group | d('node') }}"
   roles:
     - role: ionosctl
-    - role: one-driver-hooks
+    - role: one-driver
       vars:
         distribute_uuids: true
-
