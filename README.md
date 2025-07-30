@@ -25,7 +25,7 @@ This repository contains the needed code and documentation to perform an OpenNeb
 1. Initialize the dependent `one-deploy-validation` and `one-deploy` submodule
 
    ```shell
-   git submodule update --init
+   git submodule update --init --remote --merge
    ```
 
 1. Install the `opennebula.deploy` collection with dependencies using the submodule's tooling:
@@ -71,25 +71,25 @@ After provisioning, adjust the default network configuration in each of the host
 1. SSH into the host and remove the default netplan config:
 
    ```shell
-   root@217.154.225.209:~# rm /etc/netplan/50-cloud-init.yaml
+   root@h1:~# rm /etc/netplan/50-cloud-init.yaml
    ```
 
 1. Copy the updated configuration to the host:
 
    ```shell
-   $ scp _netplan/host02.yaml root@217.154.225.209:/etc/netplan
+   $ scp _netplan/h1.yaml root@h1:/etc/netplan
    ```
 
 1. Allow IP forwarding on all hosts (and add the `net.ipv4.ip_forward=1` line to `/etc/sysctl.conf` to make it persistent across reboots):
 
    ```shell
-   root@217.154.225.209:~# sysctl -w net.ipv4.ip_forward=1
+   root@h1:~# sysctl -w net.ipv4.ip_forward=1
    ```
 
 1. Apply the netplan configuration:
 
    ```shell
-   root@217.154.225.209:~# netplan apply
+   root@h1:~# netplan apply
    ```
 
 If connectivity is lost, revert via IONOS DCD console access by restoring the original netplan file (`50-cloud-init.yaml`) or recreating the host.
