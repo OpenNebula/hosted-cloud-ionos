@@ -9,4 +9,8 @@ validation:
   vm:
     check_connection: true
     market_name: 'Alpine Linux 3.20'
+  vnet:
+    name: 'pubridge'
   run_storage_benchmark: true
+  storage_benchmark:
+    vnet_name: 'pubridge'
