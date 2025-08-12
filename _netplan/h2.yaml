@@ -10,14 +10,14 @@ network:
   bridges:
     br0:
       interfaces: [ens6]
-      addresses: [87.106.223.13/32, 192.168.1.2/32]
+      addresses: [194.164.57.6/32, 192.168.1.2/32]
       nameservers:
         addresses: [8.8.8.8,8.8.4.4]
       routes:
-        - to: 87.106.223.1/32
+        - to: 194.164.57.1/32
           via: 0.0.0.0
           scope: link
         - to: 0.0.0.0/0
-          via: 87.106.223.1
+          via: 194.164.57.1
       parameters:
         stp: false

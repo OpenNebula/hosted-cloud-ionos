@@ -63,4 +63,4 @@ node:
   hosts:
     fe: { ansible_host: 87.106.134.202 }
     h1: { ansible_host: 217.154.202.216 }
-    # h2: { ansible_host: 87.106.223.13 }
+    h2: { ansible_host: 194.164.57.6 }
