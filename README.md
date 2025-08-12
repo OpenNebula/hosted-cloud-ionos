@@ -122,3 +122,11 @@ Use the provided Makefile commands to automate deployment and testing:
 
 For more information about the submodule's tooling, refer to the [one-deploy-validation's README.md](https://github.com/OpenNebula/one-deploy-validation/blob/master/README.md) and for detailed documentation on the deployment automation refer to the [one-deploy repo](https://github.com/OpenNebula/one-deploy).
 
+## Extending with a New Host
+
+To extend the deployment with a new host, follow the same steps as descibed above, in summary:
+
+1. Provision the new host as described in [Infrastructure Provisioning](#infrastructure-provisioning),
+1. Save the required parameters and adapt the files to match the provisioned infra, as shown in [Required Parameters](#required-parameters),
+1. Configure networking the same way as for all hosts, following [Configure IONOS Server Networking](#configure-ionos-server-networking),
+1. Execute the automation commands to deploy and test the cloud, as descibred in [Deployment and Validation](#deployment-and-validation).
