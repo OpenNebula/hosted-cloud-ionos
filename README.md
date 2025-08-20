@@ -94,6 +94,11 @@ After provisioning, adjust the default network configuration in each of the host
 
 If connectivity is lost, revert via IONOS DCD console access by restoring the original netplan file (`50-cloud-init.yaml`) or recreating the host.
 
+## Workaround: Disable AppArmor
+
+As discovered in this bug there is a problem with the `nic-attach` operation, see this issue: https://github.com/OpenNebula/one/issues/7203 
+As a workaround, follow the optional steps to [disable AppArmor on KVM nodes](https://docs.opennebula.io/7.0/software/installation_process/manual_installation/kvm_node_installation/#disable-apparmor-on-ubuntudebian).
+
 ## Deployment and Validation
 
 Use the provided Makefile commands to automate deployment and testing:
